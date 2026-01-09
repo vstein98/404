@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>404 — Refusal</title>
+<style>
+  .container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    font-family: Menlo, Consolas, "Liberation Mono", monospace;
+    transition: background 0.4s ease, color 0.4s ease;
+  }
+
+  body.brutalist { background:#f2f2f2; color:#000; font-family: Arial, Helvetica, sans-serif; }
+  body.sharp { background:#0b0b0b; color:#e6e6e6; }
+  body.afrofuturist { background:#07040c; color:#f5e9d6; }
+  body.shadow { background:#000; color:#9aa; }
+
+  p {
+    max-width: 520px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    opacity: 0.85;
+    margin: 1rem 0;
+  }
+
+  .copy {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .copy.visible {
+    opacity: 1;
+  }
+
+  body.shadow .copy:not(.shadow) {
+    opacity: 0.15;
+  }
+
+  .whisper {
+    font-size: 0.85rem;
+    opacity: 0.45;
+    margin-top: 3rem;
+    letter-spacing: 0.03em;
+    font-family: "Times New Roman", Times, serif;
+    font-style: italic;
+  }
+
+  .toggle {
+    position: absolute;
+    bottom: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    opacity: 0.6;
+  }
+
+  .toggle button {
+    background: none;
+    border: 1px solid currentColor;
+    color: inherit;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+  }
+
+  .toggle button:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  .toggle button:hover { opacity: 1; }
+</style>
+</head>
+<body class="brutalist">
+  <div class="container">
+    <h1>404</h1>
+
+    <div class="copy sharp" hidden>
+      <p>This page does not exist.</p>
+      <p>Creative capital is not extractable.<br>The work is offline. Ownership intact.</p>
+      <p>Value moves through relation, not reach.</p>
+    </div>
+
+    <div class="copy afrofuturist" hidden>
+      <p>This page does not exist.</p>
+      <p>Creative capital is not extractable.<br>The work is offline. Ownership intact.</p>
+      <p>Value moves through relation, not reach.</p>
+    </div>
+
+    <div class="copy brutalist">
+      <p style="font-weight:700; text-transform:uppercase;">THIS PAGE DOES NOT EXIST.</p>
+      <p style="font-weight:700; text-transform:uppercase;">CREATIVE CAPITAL IS NOT EXTRACTABLE.<br>THE WORK IS OFFLINE. OWNERSHIP INTACT.</p>
+      <p style="font-weight:700; text-transform:uppercase;">VALUE MOVES THROUGH RELATION, NOT REACH.</p>
+    </div>
+
+    <div class="copy shadow" hidden>
+      <p>You came back.</p>
+      <p>Good.</p>
+      <p class="whisper">If you want access, come as a human. Slowly.</p>
+    </div>
+  </div>
+
+  <div class="toggle">
+    <button onclick="setMode('brutalist')">Default</button>
+    <button onclick="setMode('sharp')">Deviation: Sharp</button>
+    <button onclick="setMode('afrofuturist')">Deviation: Afrofuturist</button>
+  </div>
+
+<script>
+  const visits = Number(localStorage.getItem('refusal_visits') || 0) + 1;
+  localStorage.setItem('refusal_visits', visits);
+
+  const delay = 300 + Math.random() * 400;
+
+  const toggleButtons = document.querySelectorAll('.toggle button');
+  toggleButtons.forEach(b => b.disabled = true);
+  setTimeout(() => toggleButtons.forEach(b => b.disabled = false), 600);
+
+  setTimeout(() => {
+    document.querySelectorAll('.copy').forEach(c => {
+      if (!c.hidden) c.classList.add('visible');
+    });
+
+    const whisper = document.querySelector('.copy.shadow .whisper');
+    if (whisper) {
+      whisper.style.opacity = 0;
+      setTimeout(() => whisper.style.opacity = 0.45, 250);
+    }
+  }, delay);
+
+  function setMode(mode) {
+    document.body.className = mode;
+    document.querySelectorAll('.copy').forEach(c => c.hidden = true);
+    document.querySelector('.copy.' + mode).hidden = false;
+  }
+
+  if (visits > 1) {
+    const toggle = document.querySelector('.toggle');
+    const btn = document.createElement('button');
+    btn.textContent = 'Shadow';
+    btn.onclick = () => setMode('shadow');
+    toggle.appendChild(btn);
+  }
+</script>
+</body>
+</html>
